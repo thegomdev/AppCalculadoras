@@ -38,7 +38,7 @@ const App = () => {
           component={Calculadora}
           options={{
             title: 'Tela inicial',
-            headerShown: true,
+            headerShown: false,
           }}
         />
 
