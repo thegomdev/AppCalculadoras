@@ -38,7 +38,7 @@ const App = () => {
           component={Calculadora}
           options={{
             title: 'Tela inicial',
-            headerShown: false,
+            headerShown: true,
           }}
         />
 
@@ -49,7 +49,7 @@ const App = () => {
           component={JurosCompostos}
           options={{
             title: 'Tela inicial',
-            headerShown: false,
+            headerShown: true,
           }}
         />
 
