@@ -1,6 +1,6 @@
 // HomeScreen.js
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const Home = () => {
@@ -9,7 +9,15 @@ const Home = () => {
   return (
     <View style={styles.container}>
 
-      <Text style={styles.text1}>Bem-vindo à Tela Inicial!</Text>
+
+      <View style={styles.top}>
+      <Text style={styles.text1}>Calculadoras GomDEV</Text>
+      <Image
+          source={require('../../img/logo.png')}
+          style={{ width: 200, height: 200, marginTop: 1 }}
+        />
+      </View>
+      
 
       <View style={styles.botoes}>
 
@@ -38,23 +46,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
+  top: {
+    alignItems: 'center',
+  },
+
   text1: {
-    fontSize: 20,
+    fontSize: 30,
     fontWeight: 'bold',
     marginTop: 100,
+    marginBottom: 30,
+
   },
 
   botoes: {
     alignItems: 'center',
     width: '100%',
-    marginTop: 100,
+    marginTop: 50,
   },
 
   botS: {
-    width: '35%',
+    width: '50%',
     borderRadius: 5,
     backgroundColor: '#A020F0',
-    height: 40,
+    height: 50,
     marginBottom: 15,
   },
 
@@ -62,7 +76,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#fff',
     fontWeight: 'bold',
-    marginTop: 8,
+    marginTop: 12,
+    fontSize: 25
   },
   
 
