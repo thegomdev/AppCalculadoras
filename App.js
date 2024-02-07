@@ -6,7 +6,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // Home
 import Home from './src/screens/Home';
-
 // Calculadora
 import Calculadora from './src/screens/Calculadora';
 
