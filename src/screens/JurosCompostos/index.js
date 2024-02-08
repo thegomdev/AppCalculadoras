@@ -11,6 +11,22 @@ const JurosCompostos = () => {
   const [valorMensal, setValorMensal] = useState("");
 
 
+    //  const para pegar a taxa de juros.
+    const [juros, setJuros] = useState('');
+
+    // const para pegar a taxa de juros, se é mensal ou anual.
+    const [opcaoJuros, setOpcaoJuros] = useState('Mensal');
+
+  //  const para pegar o valor do periodo.
+  const [periodo, setPeriodo] = useState('');
+
+  // const para pegar o periodo, se é mensal ou anual.
+  const [opcaoPeriodo, setOpcaoPeriodo] = useState('Mes(es)');
+
+
+  
+
+
   // função para limpar.
   const limpar = () => {
     setValorInicial('');
@@ -30,13 +46,11 @@ const JurosCompostos = () => {
           onPress={() => navigation.navigate('Home')}>
           <Feather name="corner-down-left" size={35} color="#FFF" />
         </TouchableOpacity>
-        <Text style={styles.textTop}>Calculadora</Text>
+        <Text style={styles.textTop}>Simulador de Juros Compostos</Text>
       </View>
 
 
       <View style={styles.main}>
-        <Text style={styles.text}>Simulador de Juros Compostos</Text>
-
 
         {/* Valor Inicial */}
         <View style={styles.inicial}>
@@ -82,21 +96,65 @@ const JurosCompostos = () => {
         {/* Taxa de juros */}
         <View style={styles.inicial}>
           <Text style={styles.titulo}>Taxa de juros</Text>
+
+          <View style={styles.inputPeriodo}>
+            <TextInput style={styles.textImputPeriodo}
+              placeholder="0"
+              value={juros}
+              onChangeText={(Number) => setValorInicial(Number)}
+              maxLength={15}
+              placeholderTextColor="#A020F0"/>
+              <View style={styles.pickerPeriodo}>
+              <Picker style={{ color: '#FFF'}}
+              selectedValue={opcaoJuros}
+              onValueChange={(itemValue) => setOpcaoJuros(itemValue)}>
+              <Picker.Item label="Mensal" value="Mensal" />
+              <Picker.Item label="Anual" value="Anual" />
+            </Picker>
+              </View>
+
+          </View>
+
+          
         </View>
 
         {/* Período */}
         <View style={styles.inicial}>
+
           <Text style={styles.titulo}>Período</Text>
+
+          <View style={styles.inputPeriodo}>
+            <TextInput style={styles.textImputPeriodo}
+              placeholder="0"
+              value={periodo}
+              onChangeText={(Number) => setValorInicial(Number)}
+              maxLength={15}
+              placeholderTextColor="#A020F0"/>
+              <View style={styles.pickerPeriodo}>
+              <Picker style={{ color: '#FFF'}}
+              selectedValue={opcaoPeriodo}
+              onValueChange={(itemValue) => setOpcaoPeriodo(itemValue)}>
+              <Picker.Item label="Meses" value="Mensal" />
+              <Picker.Item label="Anos" value="Anual" />
+            </Picker>
+              </View>
+
+          </View>
+
         </View>
 
+
+        {/* Botões */}
         <View style={styles.botoes}>
 
-          <TouchableOpacity style={styles.calcular}>
+          <TouchableOpacity
+          style={styles.calcular}
+          onPress={() => navigation.navigate('ResultadoJurosCompostos')}>
             <Text style={styles.calcularText}>Calcular</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.limpar} onPress={() => limpar()}>
-            <Text>Limpar</Text>
+            <Text style={styles.voltarText} >Limpar</Text>
           </TouchableOpacity>
 
         </View>
@@ -128,12 +186,13 @@ const styles = StyleSheet.create({
 
   voltarTop: {
     marginLeft: 10,
-    marginRight: 95,
+    marginRight: '3%',
   },
 
   textTop: {
-    fontSize: 30,
+    fontSize: 20,
     color: '#FFF',
+    fontWeight: 'bold',
   },
 
   main: {
@@ -143,11 +202,16 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 
+  inicial: {
+    marginBottom: 15,
+  },
+
   text: {
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 30,
     color: '#A020F0',
+    marginLeft: '8.5%',
   },
 
   titulo: {
@@ -177,19 +241,39 @@ const styles = StyleSheet.create({
     height: 40
   },
 
-  botoes: {
-    flexDirection: 'row',
-    width: '100%',
+  textImputPeriodo: {
+    borderWidth: 1,
+    width: '50%',
+    fontSize: 18,
+    padding: 10,
+    height: 40,
+  },
 
+  inputPeriodo: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: 'center',
+  },
+
+  pickerPeriodo: {
+    backgroundColor: '#A020F0',
+    width: '40%',
+    height: '76%',
+    color: '#FFF',
+  },
+
+  botoes: {
+    width: '100%',
+    marginTop: 20,
   },
 
   calcular: {
     backgroundColor: '#A020F0',
-    width: '35%',
-    height: 30,
+    width: '40%',
+    height: 45,
     borderRadius: 30,
     alignItems: 'center',
-    padding: 4,
+    padding: 12,
   },
 
   calcularText: {
@@ -199,8 +283,13 @@ const styles = StyleSheet.create({
 
   limpar: {
     position: 'absolute',
-    right: 5,
-    bottom: 5,
+    right: 25,
+    bottom: 10,
+  },
+
+  voltarText: {
+    color: '#000',
+    fontWeight: 'bold',
   },
 
 });

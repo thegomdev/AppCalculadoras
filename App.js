@@ -11,6 +11,7 @@ import Calculadora from './src/screens/Calculadora';
 
 // Calculadora Juros Compostos
 import JurosCompostos from './src/screens/JurosCompostos';
+import ResultadoJurosCompostos from './src/screens/JurosCompostos/ResultadoJurosCompostos';
 
 const Stack = createNativeStackNavigator();
 
@@ -25,7 +26,6 @@ const App = () => {
           name="Home"
           component={Home}
           options={{
-            title: 'Tela inicial',
             headerShown: false,
           }}
         />
@@ -36,7 +36,6 @@ const App = () => {
           name="Calculadora"
           component={Calculadora}
           options={{
-            title: 'Tela inicial',
             headerShown: false,
           }}
         />
@@ -47,7 +46,14 @@ const App = () => {
           name="JurosCompostos"
           component={JurosCompostos}
           options={{
-            title: 'Tela inicial',
+            headerShown: false,
+          }}
+        />
+
+        <Stack.Screen
+          name="ResultadoJurosCompostos"
+          component={ResultadoJurosCompostos}
+          options={{
             headerShown: false,
           }}
         />
