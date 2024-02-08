@@ -48,7 +48,7 @@ const App = () => {
           component={JurosCompostos}
           options={{
             title: 'Tela inicial',
-            headerShown: true,
+            headerShown: false,
           }}
         />
 

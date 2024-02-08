@@ -1,4 +1,3 @@
-// HomeScreen.js
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -11,7 +10,8 @@ const Home = () => {
 
 
       <View style={styles.top}>
-      <Text style={styles.text1}>Calculadoras GomDEV</Text>
+      <Text style={styles.text1}>Calculos</Text>
+      <Text style={styles.text1}>GomDEV</Text>
       <Image
           source={require('../../img/logo.png')}
           style={{ width: 200, height: 200, marginTop: 1 }}
@@ -48,13 +48,13 @@ const styles = StyleSheet.create({
 
   top: {
     alignItems: 'center',
+    marginTop: 80,
+    marginBottom: 30,
   },
 
   text1: {
     fontSize: 30,
     fontWeight: 'bold',
-    marginTop: 100,
-    marginBottom: 30,
 
   },
 
