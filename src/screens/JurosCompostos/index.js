@@ -44,7 +44,7 @@ const JurosCompostos = () => {
       <View style={styles.top}>
         <TouchableOpacity style={styles.voltarTop}
           onPress={() => navigation.navigate('Home')}>
-          <Feather name="corner-down-left" size={35} color="#FFF" />
+          <Feather name="arrow-left" size={35} color="#FFF" />
         </TouchableOpacity>
         <Text style={styles.textTop}>Simulador de Juros Compostos</Text>
       </View>
@@ -57,8 +57,8 @@ const JurosCompostos = () => {
           <Text style={styles.titulo}>Valor inicial</Text>
 
           <View style={styles.input}>
-            <View style={styles.crifrao}>
-              <Feather name="dollar-sign" size={25} color="#A020F0" style={styles.crifrao2} />
+            <View style={styles.cifrao}>
+              <Feather name="dollar-sign" size={25} color="#FFF" style={styles.cifrao2} />
             </View>
 
             <TextInput style={styles.textImput}
@@ -78,8 +78,8 @@ const JurosCompostos = () => {
           <Text style={styles.titulo}>Valor mensal</Text>
 
           <View style={styles.input}>
-            <View style={styles.crifrao}>
-              <Feather name="dollar-sign" size={25} color="#A020F0" style={styles.crifrao2} />
+            <View style={styles.cifrao}>
+              <Feather name="dollar-sign" size={25} color="#FFF" style={styles.cifrao2} />
             </View>
 
             <TextInput style={styles.textImput}
@@ -173,15 +173,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: '#A020F0'
+    backgroundColor: '#F8F8FF'
   },
 
   top: {
     marginTop: 40,
     width: '100%',
-    height: '5%',
+    height: '10%',
     flexDirection: "row",
     alignItems: 'center',
+    backgroundColor: '#A020F0'
   },
 
   voltarTop: {
@@ -224,12 +225,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-  crifrao: {
+  cifrao: {
     borderWidth: 1,
     padding: 3,
+    width: '13%',
+    alignItems: 'center',
+    backgroundColor: '#A020F0',
   },
 
-  crifrao2: {
+  cifrao2: {
     marginTop: 3,
   },
 
@@ -243,7 +247,7 @@ const styles = StyleSheet.create({
 
   textImputPeriodo: {
     borderWidth: 1,
-    width: '50%',
+    width: '53%',
     fontSize: 18,
     padding: 10,
     height: 40,
@@ -274,6 +278,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     alignItems: 'center',
     padding: 12,
+    marginLeft: 10,
   },
 
   calcularText: {

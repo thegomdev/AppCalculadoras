@@ -72,7 +72,7 @@ const Calculadora = () => {
             <View style={styles.top}>
             <TouchableOpacity style={styles.voltarTop}
             onPress={() => navigation.navigate('Home')}>
-            <Feather name="corner-down-left" size={35} color="#A020F0" />
+            <Feather name="arrow-left" size={35} color="#A020F0" />
             </TouchableOpacity>
             <Text style={styles.textTop}>Calculadora</Text>
             </View>
