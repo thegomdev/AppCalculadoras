@@ -72,7 +72,7 @@ const Calculadora = () => {
             <View style={styles.top}>
             <TouchableOpacity style={styles.voltarTop}
             onPress={() => navigation.navigate('Home')}>
-            <Feather name="arrow-left" size={35} color="#A020F0" />
+            <Feather name="arrow-left" size={30} color="#FFF" />
             </TouchableOpacity>
             <Text style={styles.textTop}>Calculadora</Text>
             </View>
@@ -244,13 +244,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#FFF'
+        backgroundColor: '#A020F0'
     },
 
     top: {
         marginTop: 40,
         width: '100%',
-        backgroundColor: '#FFF',
+        backgroundColor: '#A020F0',
         height: '5%',
         flexDirection: "row",
         alignItems: 'center',
@@ -263,7 +263,8 @@ const styles = StyleSheet.create({
 
     textTop: {
         fontSize: 30,
-        color: '#A020F0',
+        color: '#FFF',
+        fontWeight: 'bold',
     },
 
     text: {

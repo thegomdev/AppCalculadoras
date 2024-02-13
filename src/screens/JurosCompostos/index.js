@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
+import RNPickerSelect from 'react-native-picker-select';
 
 
 const JurosCompostos = () => {
@@ -10,28 +11,96 @@ const JurosCompostos = () => {
   const [valorInicial, setValorInicial] = useState("");
   const [valorMensal, setValorMensal] = useState("");
 
+  //  const para pegar a taxa de juros.
+  const [juros, setJuros] = useState('');
 
-    //  const para pegar a taxa de juros.
-    const [juros, setJuros] = useState('');
-
-    // const para pegar a taxa de juros, se é mensal ou anual.
-    const [opcaoJuros, setOpcaoJuros] = useState('Mensal');
+  // const para pegar a taxa de juros, se é mensal ou anual.
+  const [opcaoJuros, setOpcaoJuros] = useState('Mensal');
 
   //  const para pegar o valor do periodo.
   const [periodo, setPeriodo] = useState('');
 
   // const para pegar o periodo, se é mensal ou anual.
-  const [opcaoPeriodo, setOpcaoPeriodo] = useState('Mes(es)');
+  const [opcaoPeriodo, setOpcaoPeriodo] = useState('Meses');
 
 
-  
 
 
-  // função para limpar.
+// função para calcular o montante final, valor total investido e juros totais com base nos valores fornecidos.
+const calcularMontante = (valorInicial, valorMensal, taxaJuros, totalPeriodo) => {
+
+  let montante = valorInicial;
+  let valorTotalInvestido = valorInicial;
+
+  // loop para simular o crescimento do montante ao longo dos peroodos.
+  for (let i = 0; i < totalPeriodo; i++) {
+      // atualiza o montante multiplicando pelo fator de crescimento (1 + taxaJuros).
+      montante *= 1 + taxaJuros;
+      // adiciona o valor mensal ao montante.
+      montante += valorMensal;
+      // adiciona o valor mensal ao valorTotalInvestido.
+      valorTotalInvestido += valorMensal;
+  }
+
+  // calcula os juros totais acumulados diminuindo o valor total investido do montante final.
+  const jurosTotais = montante - valorTotalInvestido;
+
+  // retorna um objeto contendo montante final, valor total investido e juros totais.
+  return { montante, valorTotalInvestido, jurosTotais };
+};
+
+// função que utiliza os resultados da função calcularMontante para cálculos adicionais.
+const calcularJurosCompostos = () => {
+  // verifica se todos os campos estao preenchidos.
+  if (!valorInicial || !juros || !periodo) {
+      // solta um alerta caso algum campo esteja vazio.
+      Alert.alert('Atenção', 'Preencha todos os campos antes de calcular.');
+      return; // para a função caso tenha algum campo vazio.
+  }
+
+  // converte os valores para parseFloat.
+  const valorInicialNum = parseFloat(valorInicial);
+  const valorMensalNum = parseFloat(valorMensal);
+  const jurosNum = parseFloat(juros);
+  const periodoNum = parseFloat(periodo);
+
+  // calcula a taxa de juros com base na opção escolhida ('Mensal' ou 'Anual').
+  const taxaJuros = opcaoJuros === 'Mensal' ? jurosNum / 100 : jurosNum / 12 / 100;
+  // converte o periodo para meses ou anos com base na opção escolhida ('Meses' ou 'Anos').
+  const totalPeriodo = opcaoPeriodo === 'Meses' ? periodoNum : periodoNum * 12;
+
+  // chama a função calcularMontante com os parâmetros calculados e armazena os resultados.
+  const { montante, valorTotalInvestido, jurosTotais } = calcularMontante(
+      valorInicialNum,
+      valorMensalNum,
+      taxaJuros,
+      totalPeriodo
+  );
+
+    // leva os valores e resultado do juros composto para a tela ResultadoJurosCompostos.
+    navigation.navigate('ResultadoJurosCompostos', {
+      valorInicial: valorInicialNum,
+      valorMensal: valorMensalNum,
+      taxaJuros,
+      totalPeriodo,
+      montante,
+      valorTotalInvestido,
+      jurosTotais,
+      opcaoJuros,
+    });
+  };
+
+
+  // função para limpar os campos.
   const limpar = () => {
     setValorInicial('');
     setValorMensal('');
+    setJuros('');
+    setOpcaoJuros('Mensal');
+    setPeriodo('');
+    setOpcaoPeriodo('Meses');
   };
+
 
 
 
@@ -58,13 +127,14 @@ const JurosCompostos = () => {
 
           <View style={styles.input}>
             <View style={styles.cifrao}>
-              <Feather name="dollar-sign" size={25} color="#FFF" style={styles.cifrao2} />
+              <Text style={styles.cifrao2}>R$</Text>
             </View>
 
-            <TextInput style={styles.textImput}
+            <TextInput
+              style={styles.textImput}
               placeholder="00,00"
               value={valorInicial}
-              onChangeText={(Number) => setValorInicial(Number)}
+              onChangeText={(text) => setValorInicial(text)}
               maxLength={15}
               placeholderTextColor="#A020F0"
             />
@@ -79,13 +149,13 @@ const JurosCompostos = () => {
 
           <View style={styles.input}>
             <View style={styles.cifrao}>
-              <Feather name="dollar-sign" size={25} color="#FFF" style={styles.cifrao2} />
+              <Text style={styles.cifrao2}>R$</Text>
             </View>
 
             <TextInput style={styles.textImput}
               placeholder="00,00"
               value={valorMensal}
-              onChangeText={(Number) => setValorInicial(Number)}
+              onChangeText={(text) => setValorMensal(text)}
               maxLength={15}
               placeholderTextColor="#A020F0"
             />
@@ -97,25 +167,37 @@ const JurosCompostos = () => {
         <View style={styles.inicial}>
           <Text style={styles.titulo}>Taxa de juros</Text>
 
-          <View style={styles.inputPeriodo}>
-            <TextInput style={styles.textImputPeriodo}
+          <View style={styles.inputPeriodoJuros}>
+            <View style={styles.cifrao}>
+              <Text style={styles.cifrao2}>%</Text>
+            </View>
+            <TextInput style={styles.textImputPeriodoJuros}
               placeholder="0"
               value={juros}
-              onChangeText={(Number) => setValorInicial(Number)}
+              onChangeText={(text) => setJuros(text)}
               maxLength={15}
-              placeholderTextColor="#A020F0"/>
-              <View style={styles.pickerPeriodo}>
-              <Picker style={{ color: '#FFF'}}
-              selectedValue={opcaoJuros}
-              onValueChange={(itemValue) => setOpcaoJuros(itemValue)}>
-              <Picker.Item label="Mensal" value="Mensal" />
-              <Picker.Item label="Anual" value="Anual" />
-            </Picker>
-              </View>
+              placeholderTextColor="#A020F0" />
+            <View style={styles.pickerPeriodo}>
+              <RNPickerSelect
+                style={{
+                  inputIOS: styles.rnPicker,
+                  inputAndroid: styles.rnPicker,
+                }}
+                value={opcaoJuros}
+                onValueChange={(value) => setOpcaoJuros(value)}
+                items={[
+                  { label: 'Mensal', value: 'Mensal' },
+                  { label: 'Anual', value: 'Anual' },
+                ]}
+              />
+            </View>
 
           </View>
 
-          
+
+
+
+
         </View>
 
         {/* Período */}
@@ -127,17 +209,23 @@ const JurosCompostos = () => {
             <TextInput style={styles.textImputPeriodo}
               placeholder="0"
               value={periodo}
-              onChangeText={(Number) => setValorInicial(Number)}
+              onChangeText={(Number) => setPeriodo(Number)}
               maxLength={15}
-              placeholderTextColor="#A020F0"/>
-              <View style={styles.pickerPeriodo}>
-              <Picker style={{ color: '#FFF'}}
-              selectedValue={opcaoPeriodo}
-              onValueChange={(itemValue) => setOpcaoPeriodo(itemValue)}>
-              <Picker.Item label="Meses" value="Mensal" />
-              <Picker.Item label="Anos" value="Anual" />
-            </Picker>
-              </View>
+              placeholderTextColor="#A020F0" />
+            <View style={styles.pickerPeriodo}>
+              <RNPickerSelect
+                style={{
+                  inputIOS: styles.rnPicker,
+                  inputAndroid: styles.rnPicker,
+                }}
+                value={opcaoPeriodo}
+                onValueChange={(value) => setOpcaoPeriodo(value)}
+                items={[
+                  { label: 'Meses', value: 'Meses' },
+                  { label: 'Anos', value: 'Anos' },
+                ]}
+              />
+            </View>
 
           </View>
 
@@ -148,8 +236,8 @@ const JurosCompostos = () => {
         <View style={styles.botoes}>
 
           <TouchableOpacity
-          style={styles.calcular}
-          onPress={() => navigation.navigate('ResultadoJurosCompostos')}>
+            style={styles.calcular}
+            onPress={() => calcularJurosCompostos()}>
             <Text style={styles.calcularText}>Calcular</Text>
           </TouchableOpacity>
 
@@ -177,7 +265,6 @@ const styles = StyleSheet.create({
   },
 
   top: {
-    marginTop: 40,
     width: '100%',
     height: '10%',
     flexDirection: "row",
@@ -188,12 +275,15 @@ const styles = StyleSheet.create({
   voltarTop: {
     marginLeft: 10,
     marginRight: '3%',
+    marginTop: 30,
   },
 
   textTop: {
     fontSize: 20,
     color: '#FFF',
     fontWeight: 'bold',
+    marginTop: 30,
+    marginLeft: '8%',
   },
 
   main: {
@@ -217,7 +307,7 @@ const styles = StyleSheet.create({
 
   titulo: {
     fontWeight: 'bold',
-    marginLeft: 20,
+    marginLeft: 14,
   },
 
   input: {
@@ -226,15 +316,19 @@ const styles = StyleSheet.create({
   },
 
   cifrao: {
-    borderWidth: 1,
     padding: 3,
     width: '13%',
     alignItems: 'center',
     backgroundColor: '#A020F0',
+    height: '100%',
   },
 
   cifrao2: {
-    marginTop: 3,
+    alignItems: 'center',
+    color: '#FFF',
+    fontWeight: 'bold',
+    fontSize: 25,
+    marginTop: 5,
   },
 
   textImput: {
@@ -245,12 +339,28 @@ const styles = StyleSheet.create({
     height: 40
   },
 
-  textImputPeriodo: {
+  textImputPeriodoJuros: {
     borderWidth: 1,
-    width: '53%',
+    width: '60%',
     fontSize: 18,
     padding: 10,
     height: 40,
+    color: '#A020F0'
+  },
+
+  inputPeriodoJuros: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: 'center',
+  },
+
+  textImputPeriodo: {
+    borderWidth: 1,
+    width: '73%',
+    fontSize: 18,
+    padding: 10,
+    height: 40,
+    color: '#A020F0'
   },
 
   inputPeriodo: {
@@ -261,9 +371,17 @@ const styles = StyleSheet.create({
 
   pickerPeriodo: {
     backgroundColor: '#A020F0',
-    width: '40%',
-    height: '76%',
+    width: '20%',
+    height: '100%',
+  },
+
+  rnPicker: {
     color: '#FFF',
+    backgroundColor: '#A020F0',
+    fontSize: 20,
+    textAlign: 'center',
+    height: 40,
+    borderBlockColor: '#000'
   },
 
   botoes: {
@@ -284,6 +402,7 @@ const styles = StyleSheet.create({
   calcularText: {
     color: '#FFF',
     fontWeight: 'bold',
+    marginTop: 3,
   },
 
   limpar: {

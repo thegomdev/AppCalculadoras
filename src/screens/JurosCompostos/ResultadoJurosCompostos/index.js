@@ -3,8 +3,13 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 
-const ResultadoJurosCompostos = () => {
+const ResultadoJurosCompostos = ({ route }) => {
   const navigation = useNavigation();
+  const { valorInicial, valorMensal, taxaJuros, totalPeriodo, montante, valorTotalInvestido, jurosTotais, opcaoJuros } = route.params;
+
+  const voltarParaCalculo = () => {
+    navigation.navigate('JurosCompostos');
+  };
 
   return (
     <View style={styles.container}>
@@ -12,7 +17,7 @@ const ResultadoJurosCompostos = () => {
 
       <View style={styles.top}>
         <View style={styles.newCalculo}>
-          <TouchableOpacity style={styles.newCalculoT} onPress={() => navigation.navigate('JurosCompostos')}>
+          <TouchableOpacity style={styles.newCalculoT} onPress={() => voltarParaCalculo()}>
             <Feather name="arrow-left" size={13} color="#FFF" />
             <Text style={styles.tituloNewCalc}>FAZER OUTRO CÁLCULO</Text>
           </TouchableOpacity>
@@ -34,10 +39,12 @@ const ResultadoJurosCompostos = () => {
 
               <View style={styles.calcInfo}>
                 <Text>Valor Inicial</Text>
+                <Text>{valorInicial.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Text>
               </View>
 
               <View style={styles.calcInfo}>
                 <Text>Valor Mensal</Text>
+                <Text>{valorMensal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Text>
               </View>
 
             </View>
@@ -47,10 +54,12 @@ const ResultadoJurosCompostos = () => {
 
               <View style={styles.calcInfo}>
                 <Text>Taxa de Juros</Text>
+                <Text>{(taxaJuros * 100).toFixed(2)}% ao {opcaoJuros === 'Mensal' ? 'mês' : 'ano'}</Text>
               </View>
 
               <View style={styles.calcInfo}>
                 <Text>Perído em</Text>
+                <Text>{totalPeriodo} {totalPeriodo === 1 ? 'Mês' : 'Meses'}</Text>
               </View>
 
             </View>
@@ -67,16 +76,17 @@ const ResultadoJurosCompostos = () => {
           <Text style={styles.resultadoText}>Resultado</Text>
 
           <View style={styles.valorTotal}>
-            <Text>Valor total final</Text>
-          </View>
-
-          <View style={styles.valorTotal}>
-            <Text>Valor total investido</Text>
-          </View>
-
-          <View style={styles.valorTotal}>
-            <Text>Valor total em juros</Text>
-          </View>
+        <Text>Valor total final:</Text>
+        <Text style={{ color: '#A020F0', fontSize: 35, marginTop: 10, }}>R$ {montante.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Text>
+      </View>
+      <View style={styles.valorTotal}>
+        <Text>Valor total investido:</Text>
+        <Text style={{ color: '#3862cb', fontSize: 35, marginTop: 10, }}>R$ {valorTotalInvestido.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Text>
+      </View>
+      <View style={styles.valorTotal}>
+        <Text>Total em juros:</Text>
+        <Text style={{ color: '#456b1b', fontSize: 35, marginTop: 10, }}> R$ {jurosTotais.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Text>
+      </View>
 
         </View>
 
@@ -101,7 +111,7 @@ const styles = StyleSheet.create({
 
   top: {
     width: '100%',
-    marginTop: 30,
+    marginTop: 50,
     alignItems: 'center',
   },
 
