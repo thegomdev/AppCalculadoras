@@ -336,7 +336,8 @@ const styles = StyleSheet.create({
     width: '80%',
     fontSize: 18,
     padding: 10,
-    height: 40
+    height: 40,
+    color: '#A020F0',
   },
 
   textImputPeriodoJuros: {

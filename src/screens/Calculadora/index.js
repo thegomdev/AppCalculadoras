@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center',
         height: '95%',
-        backgroundColor: '#000000',
+        backgroundColor: '#FFF',
     },
 
     result: {
@@ -288,7 +288,7 @@ const styles = StyleSheet.create({
     },
 
     resultText: {
-        color: '#FFF',
+        color: '#363636',
         fontSize: 70,
     },
 

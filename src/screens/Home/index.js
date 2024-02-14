@@ -10,11 +10,11 @@ const Home = () => {
 
 
       <View style={styles.top}>
-      <Text style={styles.text1}>Calculos</Text>
-      <Text style={styles.text1}>GomDEV</Text>
+      <Text style={styles.text1}>SmartGom</Text>
+      <Text style={styles.text1}>Calculator</Text>
       <Image
           source={require('../../img/logo.png')}
-          style={{ width: 200, height: 200, marginTop: 1 }}
+          style={{ width: 200, height: 200, marginTop: 10 }}
         />
       </View>
       
