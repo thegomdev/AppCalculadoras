@@ -7,6 +7,9 @@ const Calculadora = () => {
     const navigation = useNavigation();
     const [exibir, setExibir] = useState('');
 
+    // const para mudar o tema.
+    const [darkMode, setDarkMode] = useState(false);
+
     // const para ver o resultado, caso clicar em algum numero, ele vai fazer um novo calculo.
     const [resultadoExibido, setResultadoExibido] = useState(false);
 
@@ -55,7 +58,7 @@ const Calculadora = () => {
     const resultadoFinal = () => {
         try {
             const resultado = eval(exibir);
-            const resultadoFormatado = Number(resultado.toFixed(11)).toLocaleString();
+            const resultadoFormatado = Number(resultado.toFixed(11)).toString();
             setExibir(resultadoFormatado);
             setResultadoExibido(true);
         } catch (erro) {
@@ -65,25 +68,27 @@ const Calculadora = () => {
     };
 
 
-
     return (
-        <View style={styles.container}>
+        <View style={{ backgroundColor: darkMode ? "#A020F0" : "#A020F0", ...styles.container}}>
 
             <View style={styles.top}>
-            <TouchableOpacity style={styles.voltarTop}
-            onPress={() => navigation.navigate('Home')}>
-            <Feather name="arrow-left" size={30} color="#FFF" />
-            </TouchableOpacity>
-            <Text style={styles.textTop}>Calculadora</Text>
+                <TouchableOpacity style={styles.voltarTop}
+                    onPress={() => navigation.navigate('Home')}>
+                    <Feather name="arrow-left" size={30} color={darkMode ? "#FFF" : "#FFF"} />
+                </TouchableOpacity>
+                <Text style={{color: darkMode ? "#FFF" : "#FFF" , ...styles.textTop}}>Calculadora</Text>
+                <View style={styles.dark}>
+                    <Feather name={darkMode ? "sun" : "moon"} size={30} color={darkMode ? "#FFF" : "#363636"} onPress={() => darkMode ? setDarkMode(false) : setDarkMode(true)} />
+                </View>
             </View>
 
 
             {/* Estrutura da calculaora inteira */}
-            <View style={styles.calc}>
+            <View style={{ backgroundColor: darkMode ? "#000" : "#FFF", ...styles.calc }}>
 
                 {/* Estrutura do resultado */}
-                <View style={styles.result}>
-                    <Text style={styles.resultText}>{exibir || '0'}</Text>
+                <View style={{ backgroundColor: darkMode ? "#000" : "#FFF", ...styles.result }}>
+                    <Text style={{ color: darkMode ? "#FFF" : "#363636", ...styles.resultText }}>{exibir || '0'}</Text>
                 </View>
 
                 {/* Estrutura das funções */}
@@ -244,16 +249,15 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#A020F0'
     },
 
     top: {
-        marginTop: 40,
+        marginTop: 30,
         width: '100%',
-        backgroundColor: '#A020F0',
         height: '5%',
         flexDirection: "row",
         alignItems: 'center',
+        marginBottom: 10,
     },
 
     voltarTop: {
@@ -263,8 +267,11 @@ const styles = StyleSheet.create({
 
     textTop: {
         fontSize: 30,
-        color: '#FFF',
         fontWeight: 'bold',
+    },
+
+    dark: {
+        marginLeft: '19%',
     },
 
     text: {
@@ -276,19 +283,16 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center',
         height: '95%',
-        backgroundColor: '#FFF',
     },
 
     result: {
         height: '25%',
-        backgroundColor: '#0000',
-        width: '95%',
+        width: '100%',
         alignItems: 'center',
         justifyContent: "center",
     },
 
     resultText: {
-        color: '#363636',
         fontSize: 70,
     },
 
