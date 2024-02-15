@@ -5,78 +5,42 @@ import { useNavigation } from '@react-navigation/native';
 
 const Calculadora = () => {
     const navigation = useNavigation();
-    const [exibir, setExibir] = useState('');
 
     // const para mudar o tema.
     const [darkMode, setDarkMode] = useState(false);
+    // const exibir.
+    const [exibir, setExibir] = useState('');
 
-    // const para ver o resultado, caso clicar em algum numero, ele vai fazer um novo calculo.
-    const [resultadoExibido, setResultadoExibido] = useState(false);
-
-
-    // Ao clicar no número ele adiciona o numero adicionado conforme a função.
-    const pressionar = (numero) => {
-        if (resultadoExibido) {
-            setExibir(numero);
-            setResultadoExibido(false);
-        } else {
-            // Verifica se o botão ponto (.) foi pressionado e se não tem ponto na expressão atual.
-            if (numero === '.' && !exibir.includes('.')) {
-                // Se não haver ponto e a expressão não estiver vazia, adiciona o ponto.
-                setExibir((exibirAnterior) => exibirAnterior !== '' ? exibirAnterior + numero : '0.');
-            } else {
-                // Adiciona o numero ou ponto normalmente.
-                setExibir((exibirAnterior) => exibirAnterior + numero);
-            }
-        }
+    const pressionar = (valor) => {
+        setExibir((prevExibir) => prevExibir + valor);
     };
 
+    const usarOperador = (operador) => {
+        setExibir((prevExibir) => prevExibir + operador);
+    };
 
-
-    // Limpar calc.
     const limpar = () => {
         setExibir('');
-        setResultadoExibido(false);
     };
 
-
-    // Usando o operador.
-    const usarOperador = (operador) => {
-        // Verifica se o ultimo caractere é um operador.
-        const ultimoOperador = exibir.slice(-1);
-        if (['+', '-', '*', '/'].includes(ultimoOperador)) {
-            // Substitui o operador anterior.
-            setExibir((exibirAnterior) => exibirAnterior.slice(0, -1) + operador);
-        } else {
-            // Adiciona o operador normalmente.
-            setExibir((exibirAnterior) => exibirAnterior + operador);
-        }
-        setResultadoExibido(false);
-    };
-
-    // Exibir o resultado.
     const resultadoFinal = () => {
         try {
             const resultado = eval(exibir);
-            const resultadoFormatado = Number(resultado.toFixed(11)).toString();
-            setExibir(resultadoFormatado);
-            setResultadoExibido(true);
-        } catch (erro) {
+            setExibir(resultado.toString());
+        } catch (error) {
             setExibir('Erro');
-            setResultadoExibido(true);
         }
     };
 
-
     return (
-        <View style={{ backgroundColor: darkMode ? "#A020F0" : "#A020F0", ...styles.container}}>
+        <View style={{ backgroundColor: darkMode ? "#A020F0" : "#A020F0", ...styles.container }}>
 
             <View style={styles.top}>
                 <TouchableOpacity style={styles.voltarTop}
                     onPress={() => navigation.navigate('Home')}>
                     <Feather name="arrow-left" size={30} color={darkMode ? "#FFF" : "#FFF"} />
                 </TouchableOpacity>
-                <Text style={{color: darkMode ? "#FFF" : "#FFF" , ...styles.textTop}}>Calculadora</Text>
+                <Text style={{ color: darkMode ? "#FFF" : "#FFF", ...styles.textTop }}>Calculadora</Text>
                 <View style={styles.dark}>
                     <Feather name={darkMode ? "sun" : "moon"} size={30} color={darkMode ? "#FFF" : "#363636"} onPress={() => darkMode ? setDarkMode(false) : setDarkMode(true)} />
                 </View>
