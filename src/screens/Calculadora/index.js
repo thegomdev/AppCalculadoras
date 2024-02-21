@@ -2,27 +2,59 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import math from 'mathjs';
 
 const Calculadora = () => {
     const navigation = useNavigation();
-
     // const para mudar o tema.
     const [darkMode, setDarkMode] = useState(false);
     // const exibir.
     const [exibir, setExibir] = useState('');
 
-    const pressionar = (valor) => {
-        setExibir((prevExibir) => prevExibir + valor);
+    // const para ver o resultado, caso clicar em algum numero, ele vai fazer um novo calculo.
+    const [resultadoExibido, setResultadoExibido] = useState(false);
+
+
+    // Ao clicar no número ele adiciona o numero adicionado conforme a função.
+    const pressionar = (numero) => {
+        if (resultadoExibido) {
+            setExibir(numero);
+            setResultadoExibido(false);
+        } else {
+            // Verifica se o botão ponto (.) foi pressionado e se não tem ponto na expressão atual.
+            if (numero === '.' && !exibir.includes('.')) {
+                // Se não haver ponto e a expressão não estiver vazia, adiciona o ponto.
+                setExibir((exibirAnterior) => exibirAnterior !== '' ? exibirAnterior + numero : '0.');
+            } else {
+                // Adiciona o numero ou ponto normalmente.
+                setExibir((exibirAnterior) => exibirAnterior + numero);
+            }
+        }
     };
 
-    const usarOperador = (operador) => {
-        setExibir((prevExibir) => prevExibir + operador);
-    };
 
+
+    // Limpar calc.
     const limpar = () => {
         setExibir('');
     };
 
+
+    // Usando o operador.
+    const usarOperador = (operador) => {
+        // Verifica se o ultimo caractere é um operador.
+        const ultimoOperador = exibir.slice(-1);
+        if (['+', '-', '*', '/'].includes(ultimoOperador)) {
+            // Substitui o operador anterior.
+            setExibir((exibirAnterior) => exibirAnterior.slice(0, -1) + operador);
+        } else {
+            // Adiciona o operador normalmente.
+            setExibir((exibirAnterior) => exibirAnterior + operador);
+        }
+        setResultadoExibido(false);
+    };
+
+    // Exibir o resultado.
     const resultadoFinal = () => {
         try {
             const resultado = eval(exibir);
@@ -200,7 +232,6 @@ const Calculadora = () => {
                     </View>
 
 
-
                 </View>
 
             </View>
@@ -216,12 +247,11 @@ const styles = StyleSheet.create({
     },
 
     top: {
-        marginTop: 30,
+        marginTop: 40,
         width: '100%',
         height: '5%',
         flexDirection: "row",
         alignItems: 'center',
-        marginBottom: 10,
     },
 
     voltarTop: {
@@ -254,16 +284,14 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center',
         justifyContent: "center",
+        marginBottom: 60,
     },
 
     resultText: {
         fontSize: 70,
     },
 
-
     // Linha 1
-
-
     linha1: {
         flexDirection: "row",
         height: 95,
